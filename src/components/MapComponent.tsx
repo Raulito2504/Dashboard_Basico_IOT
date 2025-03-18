@@ -27,7 +27,7 @@ export default function MapComponent({ sidebarOpen, parcelas, onParcelaSelect, s
             map.current = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: "mapbox://styles/raulanto/cm3z7570700vl01rwbrl0h8wh",
-                center: [-86.8475, 21.1619], // Coordenadas de Cancún
+                center: [-86.87200723673159, 21.062975433767964], // Coordenadas de Cancún
                 zoom: 11, // Reducido el zoom para ver más ubicaciones
             })
 

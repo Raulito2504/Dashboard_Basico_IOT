@@ -1,6 +1,6 @@
 import axios from "axios"
 
-// Definición de tipos para los datos de la API
+
 export interface Sensor {
     humedad: number
     temperatura: number
@@ -25,24 +25,24 @@ export interface ApiResponse {
     parcelas: Parcela[]
 }
 
-// Creación de la instancia de Axios con configuración adicional
+
 const api = axios.create({
     baseURL: "https://moriahmkt.com",
-    timeout: 10000, // Aumentamos el timeout a 10 segundos
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
     },
 })
 
-// Función para obtener los datos de la API con mejor manejo de errores
+
 export const fetchIotData = async (): Promise<ApiResponse> => {
     try {
         console.log("Iniciando petición a la API...")
         const response = await api.get<ApiResponse>("/iotapp/")
         console.log("Respuesta recibida:", response.data)
 
-        // Validar que la respuesta tenga la estructura esperada
+
         if (!response.data || !response.data.sensores || !response.data.parcelas) {
             console.error("Respuesta con formato incorrecto:", response.data)
             throw new Error("Formato de respuesta incorrecto")
@@ -52,13 +52,12 @@ export const fetchIotData = async (): Promise<ApiResponse> => {
     } catch (error) {
         console.error("Error detallado al obtener datos de la API:", error)
 
-        // Verificar si es un error de Axios para obtener más detalles
+
         if (axios.isAxiosError(error)) {
             console.error("Detalles de la respuesta:", error.response?.data)
             console.error("Estado HTTP:", error.response?.status)
             console.error("Cabeceras:", error.response?.headers)
 
-            // Si hay un problema de CORS, podría ser útil esta información
             if (error.response?.status === 0) {
                 console.error("Posible error de CORS o la API no está disponible")
             }
@@ -68,7 +67,7 @@ export const fetchIotData = async (): Promise<ApiResponse> => {
     }
 }
 
-// Función alternativa usando fetch en caso de que axios tenga problemas
+
 export const fetchIotDataWithFetch = async (): Promise<ApiResponse> => {
     try {
         console.log("Iniciando petición con fetch...")
@@ -81,7 +80,7 @@ export const fetchIotDataWithFetch = async (): Promise<ApiResponse> => {
         const data = await response.json()
         console.log("Respuesta recibida con fetch:", data)
 
-        // Validar que la respuesta tenga la estructura esperada
+
         if (!data || !data.sensores || !data.parcelas) {
             console.error("Respuesta con formato incorrecto (fetch):", data)
             throw new Error("Formato de respuesta incorrecto")
