@@ -1,15 +1,24 @@
 "use client"
 
-import { CalendarDays, FolderClosed, Home, LineChart, Users2, Vegan } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import type React from "react"
 
-export default function Sidebar() {
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { LayoutDashboard, BarChart, Globe, Settings, Users, Droplets, Thermometer, Sun } from "lucide-react"
+
+const Sidebar = () => {
+    const location = useLocation()
     const navigate = useNavigate()
 
-    // Función para manejar los clics en los botones del sidebar
-    const handleNavigation = (path: string) => {
-        // Si es el botón de Dashboard, navegar al dashboard
-        if (path === "/dashboard") {
+    const isActive = (path: string) => {
+        return location.pathname === path
+    }
+
+    // Función para manejar los clics en los enlaces
+    const handleNavigation = (e: React.MouseEvent, path: string) => {
+        e.preventDefault() // Prevenir la navegación por defecto del Link
+
+        // Si es el botón de Dashboard o Analysis, navegar a esa ruta
+        if (path === "/dashboard" || path === "/analysis") {
             navigate(path)
         } else {
             // Para cualquier otro botón, navegar a la página 404
@@ -18,97 +27,92 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="w-64 bg-secondary border-r border-primary/20 h-[calc(100vh-8rem)] transition-all duration-300 ease-in-out">
-            <div className="p-4">
-                {/* Logo - Reemplazado con el icono Vegan */}
-                <div className="flex items-center justify-center mb-6">
-                    <Vegan className="h-10 w-10 text-primary" />
-                </div>
-
-                <div className="space-y-2">
-                    <button
-                        className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md bg-primary/10 text-white hover:bg-primary/20 transition-colors"
-                        onClick={() => handleNavigation("/dashboard")}
-                    >
-                        <Home className="mr-2 h-4 w-4 text-primary" />
-                        Casa
-                        <span className="ml-auto text-xs bg-primary/20 px-2 py-0.5 rounded text-primary">5</span>
-                    </button>
-
-                    <button
-                        className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                        onClick={() => handleNavigation("/team")}
-                    >
-                        <Users2 className="mr-2 h-4 w-4 text-primary" />
-                        Equipo
-                    </button>
-
-                    <button
-                        className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                        onClick={() => handleNavigation("/projects")}
-                    >
-                        <FolderClosed className="mr-2 h-4 w-4 text-primary" />
-                        Proyectos
-                        <span className="ml-auto text-xs bg-primary/20 px-2 py-0.5 rounded text-primary">12</span>
-                    </button>
-
-                    <button
-                        className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                        onClick={() => handleNavigation("/calendar")}
-                    >
-                        <CalendarDays className="mr-2 h-4 w-4 text-primary" />
-                        Calendario
-                        <span className="ml-auto text-xs bg-primary/20 px-2 py-0.5 rounded text-primary">20+</span>
-                    </button>
-
-                    <button
-                        className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                        onClick={() => handleNavigation("/stats")}
-                    >
-                        <LineChart className="mr-2 h-4 w-4 text-primary" />
-                        Estadísticas
-                    </button>
-                </div>
-
-                <div className="mt-8">
-                    <h2 className="px-3 text-sm font-semibold text-primary/80 mb-2">Mis equipos</h2>
-
-                    <div className="space-y-2">
-                        <button
-                            className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                            onClick={() => handleNavigation("/teams/totem")}
-                        >
-                            <div className="mr-2 h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary font-medium">
-                                T
-                            </div>
-                            Totem
-                        </button>
-
-                        <button
-                            className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                            onClick={() => handleNavigation("/teams/heretics")}
-                        >
-                            <div className="mr-2 h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary font-medium">
-                                H
-                            </div>
-                            Heretics
-                        </button>
-                    </div>
-                </div>
+        <aside className="w-64 bg-card border-r border-border flex flex-col h-full">
+            <div className="p-4 border-b border-border">
+                <h1 className="text-xl font-bold text-primary">AgroIoT</h1>
+                <p className="text-xs text-muted-foreground">Sistema de monitoreo de cultivos</p>
             </div>
 
-            <div className="absolute bottom-4 left-0 w-64 border-t border-primary/20 p-4">
-                <button
-                    className="w-full flex items-center justify-start px-3 py-2 text-sm rounded-md text-white hover:bg-primary/10 transition-colors"
-                    onClick={() => handleNavigation("/profile")}
+            <nav className="flex-1 p-4 space-y-1">
+                <Link
+                    to="/dashboard"
+                    className={`flex items-center px-4 py-2 rounded-md ${isActive("/dashboard") ? "bg-primary text-background" : "hover:bg-muted"}`}
+                    onClick={(e) => handleNavigation(e, "/dashboard")}
                 >
-                    <div className="mr-2 h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary font-medium">
-                        EC
-                    </div>
-                    Eusebio Calixto
-                </button>
+                    <LayoutDashboard className="mr-3 h-5 w-5" />
+                    Dashboard
+                </Link>
+                <Link
+                    to="/analysis"
+                    className={`flex items-center px-4 py-2 rounded-md ${isActive("/analysis") ? "bg-primary text-background" : "hover:bg-muted"}`}
+                    onClick={(e) => handleNavigation(e, "/analysis")}
+                >
+                    <BarChart className="mr-3 h-5 w-5" />
+                    Análisis
+                </Link>
+
+                <div className="pt-4 pb-2">
+                    <div className="px-4 text-xs font-semibold text-muted-foreground">SENSORES</div>
+                </div>
+
+                <div
+                    className="flex items-center px-4 py-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => navigate("/404")}
+                >
+                    <Thermometer className="mr-3 h-5 w-5 text-[#FF5733]" />
+                    Temperatura
+                </div>
+                <div
+                    className="flex items-center px-4 py-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => navigate("/404")}
+                >
+                    <Droplets className="mr-3 h-5 w-5 text-[#33A1FD]" />
+                    Humedad
+                </div>
+                <div
+                    className="flex items-center px-4 py-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => navigate("/404")}
+                >
+                    <Sun className="mr-3 h-5 w-5 text-[#FFCC33]" />
+                    Luz Solar
+                </div>
+
+                <div className="pt-4 pb-2">
+                    <div className="px-4 text-xs font-semibold text-muted-foreground">GESTIÓN</div>
+                </div>
+
+                <div
+                    className="flex items-center px-4 py-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => navigate("/404")}
+                >
+                    <Globe className="mr-3 h-5 w-5" />
+                    Parcelas
+                </div>
+                <div
+                    className="flex items-center px-4 py-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => navigate("/404")}
+                >
+                    <Users className="mr-3 h-5 w-5" />
+                    Usuarios
+                </div>
+                <div
+                    className="flex items-center px-4 py-2 rounded-md hover:bg-muted cursor-pointer"
+                    onClick={() => navigate("/404")}
+                >
+                    <Settings className="mr-3 h-5 w-5" />
+                    Configuración
+                </div>
+            </nav>
+
+            <div className="p-4 border-t border-border">
+                <div className="bg-muted p-3 rounded-md">
+                    <p className="text-xs text-muted-foreground">Última actualización:</p>
+                    <p className="text-sm">{new Date().toLocaleString()}</p>
+                </div>
             </div>
-        </div>
+        </aside>
     )
 }
+
+export default Sidebar
 
